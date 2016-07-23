@@ -4,7 +4,6 @@
 #include <malloc.h>
 
 #define LOCAL_RAND
-
 #if defined(LOCAL_RAND)
 extern __thread unsigned long *seeds;
 #endif
