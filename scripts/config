@@ -1,6 +1,12 @@
 unm=$(uname -n);
 
-num_cores=$(nproc);
+os_name=$(uname -s);
+if [ "$os_name" = "Darwin" ];
+then
+	num_cores=$(sysctl -n hw.ncpu);
+else
+	num_cores=$(nproc);
+fi;
 
 echo "## Use $num_cores as the number of cores."
 echo "## If not correct, change it in scripts/config";

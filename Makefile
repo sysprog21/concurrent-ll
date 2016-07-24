@@ -2,7 +2,13 @@
 # MODE = release | debug (default: release)
 
 # Management PC specific settings
+OS_NAME := $(shell uname -s)
+ifeq ($(OS_NAME),Darwin) # for OS X, use build in tools
+CORE_NUM := $(shell sysctl -n hw.ncpu)
+else # Linux and other
 CORE_NUM := $(shell nproc)
+endif
+
 ifneq ($(CORE_SPEED_KHz), )
 CFLAGS += -DCORE_NUM=${CORE_NUM}
 else
