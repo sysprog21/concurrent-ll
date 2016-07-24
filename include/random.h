@@ -1,7 +1,11 @@
 #ifndef _H_RANDOM_
 #define _H_RANDOM_
 
+#ifndef __APPLE__
 #include <malloc.h>
+#elif defined(__APPLE__)
+#include <stdlib.h>
+#endif
 
 #define LOCAL_RAND
 #if defined(LOCAL_RAND)
