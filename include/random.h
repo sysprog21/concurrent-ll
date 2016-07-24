@@ -14,6 +14,17 @@ extern __thread unsigned long *seeds;
 
 #define my_random xorshf96
 
+/* Mac OSX lack of memalign but has posix_memalign */
+#if defined(__APPLE__)
+static inline
+void *memalign(size_t size, size_t alignment)
+{
+    void *buffer;
+    posix_memalign(&buffer, alignment, size);
+    return buffer;
+}
+#endif
+
 /* fast but weak random number generator */
 static inline
 uint32_t fast_rand()
