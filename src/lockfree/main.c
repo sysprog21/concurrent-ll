@@ -220,22 +220,22 @@ int main(int argc, char *const argv[])
             break;
         case 'h':
             printf("lock stress test\n"
-                        "\n"
-                        "Usage:\n"
-                        "  stress_test [options...]\n"
-                        "\n"
-                        "Options:\n"
-                        "  -h, --help\n"
-                        "        Print this message\n"
-                        "  -d, --duration <int>\n"
-                        "        Test duration in milliseconds (0=infinite, default=" XSTR(DEFAULT_DURATION) ")\n"
-                        "  -u, --updates <int>\n"
-                        "        Percentage of update operations (default=" XSTR(DEFAULT_UPDATES) ")\n"
-                        "  -r, --range <int>\n"
-                        "        Key range (default=" XSTR(DEFAULT_RANGE) ")\n"
-                        "  -n, --num-threads <int>\n"
-                        "        Number of threads (default=" XSTR(DEFAULT_NUM_THREADS) ")\n"
-                      );
+                   "\n"
+                   "Usage:\n"
+                   "  stress_test [options...]\n"
+                   "\n"
+                   "Options:\n"
+                   "  -h, --help\n"
+                   "        Print this message\n"
+                   "  -d, --duration <int>\n"
+                   "        Test duration in milliseconds (0=infinite, default=" XSTR(DEFAULT_DURATION) ")\n"
+                   "  -u, --updates <int>\n"
+                   "        Percentage of update operations (default=" XSTR(DEFAULT_UPDATES) ")\n"
+                   "  -r, --range <int>\n"
+                   "        Key range (default=" XSTR(DEFAULT_RANGE) ")\n"
+                   "  -n, --num-threads <int>\n"
+                   "        Number of threads (default=" XSTR(DEFAULT_NUM_THREADS) ")\n"
+            );
             exit(0);
         case 'd':
             duration = atoi(optarg);
