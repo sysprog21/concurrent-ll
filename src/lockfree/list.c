@@ -61,12 +61,12 @@ node_t *list_search(llist_t *set, val_t val, node_t **left_node)
     while (1) {
         node_t *t = set->head;
         node_t *t_next = set->head->next;
-        while (is_marked_ref(t_next) || (t->data < val)) {
-            if (!is_marked_ref(t_next)) {
+        while (is_marked_ref((long)t_next) || (t->data < val)) {
+            if (!is_marked_ref((long)t_next)) {
                 (*left_node) = t;
                 left_node_next = t_next;
             }
-            t = get_unmarked_ref(t_next);
+            t = (node_t *)get_unmarked_ref((long)t_next);
             if (t == set->tail)
                 break;
             t_next = t->next;
@@ -74,12 +74,12 @@ node_t *list_search(llist_t *set, val_t val, node_t **left_node)
         right_node = t;
 
         if (left_node_next == right_node) {
-            if (!is_marked_ref(right_node->next))
+            if (!is_marked_ref((long)right_node->next))
                 return right_node;
         } else {
             if (CAS_PTR(&((*left_node)->next), left_node_next, right_node) ==
                 left_node_next) {
-                if (!is_marked_ref(right_node->next))
+                if (!is_marked_ref((long)right_node->next))
                     return right_node;
             }
         }
@@ -92,9 +92,9 @@ node_t *list_search(llist_t *set, val_t val, node_t **left_node)
  */
 int list_contains(llist_t *the_list, val_t val)
 {
-    node_t *iterator = get_unmarked_ref(the_list->head->next);
+    node_t *iterator = (node_t *)get_unmarked_ref((long)the_list->head->next);
     while (iterator != the_list->tail) {
-        if (!is_marked_ref(iterator->next) && iterator->data >= val) {
+        if (!is_marked_ref((long)iterator->next) && iterator->data >= val) {
             // either we found it, or found the first larger element
             if (iterator->data == val)
                 return 1;
@@ -103,7 +103,7 @@ int list_contains(llist_t *the_list, val_t val)
         }
 
         // always get unmarked pointer
-        iterator = get_unmarked_ref(iterator->next);
+        iterator = (node_t *)get_unmarked_ref((long)iterator->next);
     }
     return 0;
 }
@@ -174,14 +174,14 @@ int list_remove(llist_t *the_list, val_t val)
     right = left = right_succ = NULL;
     while (1) {
         right = list_search(the_list, val, &left);
-        // check if we found our node
+        // check if we found out node
         if (right == the_list->tail || right->data != val) {
             return 0;
         }
         right_succ = right->next;
-        if (!is_marked_ref(right_succ)) {
+        if (!is_marked_ref((long)right_succ)) {
             if (CAS_PTR(&(right->next), right_succ,
-                        get_marked_ref(right_succ)) == right_succ) {
+                        get_marked_ref((long)right_succ)) == right_succ) {
                 FAD_U32(&(the_list->size));
                 return 1;
             }
