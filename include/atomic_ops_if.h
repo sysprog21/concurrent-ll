@@ -50,7 +50,7 @@ static inline void AO_nop_full(void)
 #define CAS_U64_bool(addr, old, new) (old == CAS_U64(addr, old, new))
 
 #define ATOMIC_CAS_MB(a, e, v) \
-    CAS_U64_bool((volatile AO_t *)(a), (AO_t)(e), (AO_t)(v))
-#define ATOMIC_FETCH_AND_INC_FULL(a) FAI_U64((volatile AO_t *)(a))
+    CAS_U64_bool((volatile AO_t *) (a), (AO_t)(e), (AO_t)(v))
+#define ATOMIC_FETCH_AND_INC_FULL(a) FAI_U64((volatile AO_t *) (a))
 
 #endif

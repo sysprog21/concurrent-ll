@@ -1,10 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <pthread.h>
 #include <assert.h>
 #include <getopt.h>
 #include <limits.h>
+#include <pthread.h>
 #include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
 
@@ -102,7 +102,7 @@ typedef ALIGNED(64) struct thread_data {
 void *test(void *data)
 {
     // get the per-thread data
-    thread_data_t *d = (thread_data_t *)data;
+    thread_data_t *d = (thread_data_t *) data;
     // scale percentages of the various operations to the range 0..255
     // this saves us a floating point operation during the benchmark
     // e.g instead of random()%100 to determine the next operation we will do,
@@ -125,7 +125,7 @@ void *test(void *data)
     // resides in the same memory node
     for (i = 0; i < d->num_add; ++i) {
         the_value =
-            (val_t)my_random(&seeds[0], &seeds[1], &seeds[2]) & rand_max;
+            (val_t) my_random(&seeds[0], &seeds[1], &seeds[2]) & rand_max;
         // we make sure the insert was effective (as opposed to just updating an
         // existing entry)
         if (list_add(the_list, the_value) == 0) {
@@ -271,13 +271,13 @@ int main(int argc, char *const argv[])
     the_list = list_new();
 
     // initialize the data which will be passed to the threads
-    if ((data = (thread_data_t *)malloc(num_threads * sizeof(thread_data_t))) ==
-        NULL) {
+    if ((data = (thread_data_t *) malloc(num_threads *
+                                         sizeof(thread_data_t))) == NULL) {
         perror("malloc");
         exit(1);
     }
 
-    if ((threads = (pthread_t *)malloc(num_threads * sizeof(pthread_t))) ==
+    if ((threads = (pthread_t *) malloc(num_threads * sizeof(pthread_t))) ==
         NULL) {
         perror("malloc");
         exit(1);
@@ -307,7 +307,8 @@ int main(int argc, char *const argv[])
         if (i < ((max_key / 2) % num_threads))
             data[i].num_add++;
         data[i].barrier = &barrier;
-        if (pthread_create(&threads[i], &attr, test, (void *)(&data[i])) != 0) {
+        if (pthread_create(&threads[i], &attr, test, (void *) (&data[i])) !=
+            0) {
             fprintf(stderr, "Error creating thread\n");
             exit(1);
         }
