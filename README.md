@@ -1,8 +1,8 @@
-Overview
---------
-This package contains the skeleton code for implementing and evaluating 
-two concurrent linked lists: a lock-free and a lock-based.
-The implementations should work on any Linux-based x86 environments.
+# concurrent-ll
+
+The `concurrent-ll` package contains the skeleton code for implementing and
+evaluating two concurrent linked lists: a lock-free and a lock-based.
+The implementations should work on any Linux-based `x86`/`x86_64` environments.
 
 Both lists are sorted and provide three main operations: 
 * adding an element to the list (if not already in the list)
@@ -26,8 +26,8 @@ Lock-free linkedlist implementation of Harris' algorithm
 Build
 -----
 You can compile the code (in Linux) by calling:
-```
-make
+```shell
+$ make
 ```
 in the base directory.
 
@@ -36,15 +36,15 @@ in `include/utils.h`.
 file under the "#if defined(DEFAULT)" definitions.
 
 You can verify by calling:
-```
-make check
+```shell
+$ make check
 ```
 
 Benchmarking
 ------------
 You can invoke the benchmarking scripts by calling:
-```
-make bench
+```shell
+$ make bench
 ```
 
 Tools
