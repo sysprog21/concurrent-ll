@@ -1,39 +1,39 @@
 #ifndef _H_RANDOM_
 #define _H_RANDOM_
 
-#ifndef __APPLE__
-#include <malloc.h>
-#elif defined(__APPLE__)
+#include <stdint.h>
 #include <stdlib.h>
-#endif
 
-#define LOCAL_RAND
-#if defined(LOCAL_RAND)
-extern __thread unsigned long *seeds;
-#endif
+extern __thread uint64_t *seeds;
 
 #define my_random xorshf96
 
-/* Mac OSX lack of memalign but has posix_memalign */
-#if defined(__APPLE__)
-static inline void *memalign(size_t size, size_t alignment)
+typedef uint64_t ticks;
+
+#if defined(__i386__)
+static inline ticks getticks(void)
 {
-    void *buffer;
-    posix_memalign(&buffer, alignment, size);
-    return buffer;
+    ticks ret;
+    __asm__ __volatile__("rdtsc" : "=A"(ret));
+    return ret;
 }
+#elif defined(__x86_64__)
+static inline ticks getticks(void)
+{
+    unsigned hi, lo;
+    __asm__ __volatile__("rdtsc" : "=a"(lo), "=d"(hi));
+    return ((unsigned long long) lo) | (((unsigned long long) hi) << 32);
+}
+#else
+#error "Unsupported platform"
 #endif
 
-/* fast but weak random number generator */
-static inline uint32_t fast_rand()
+static inline uint64_t *seed_rand()
 {
-    return ((getticks() & 4294967295UL) >> 4);
-}
+    uint64_t *seeds;
+    if (posix_memalign((void **) &seeds, 64, 64) != 0) /* something wrong */
+        return NULL;
 
-static inline unsigned long *seed_rand()
-{
-    unsigned long *seeds;
-    seeds = (unsigned long *) memalign(64, 64);
     seeds[0] = getticks() % 123456789;
     seeds[1] = getticks() % 362436069;
     seeds[2] = getticks() % 521288629;
@@ -41,12 +41,10 @@ static inline unsigned long *seed_rand()
 }
 
 /* Marsaglia's xorshf generator */
-static inline unsigned long xorshf96(unsigned long *x,
-                                     unsigned long *y,
-                                     unsigned long *z)
+static inline uint64_t xorshf96(uint64_t *x, uint64_t *y, uint64_t *z)
 {
     /* period 2^96-1 */
-    unsigned long t;
+    uint64_t t;
     (*x) ^= (*x) << 16;
     (*x) ^= (*x) >> 5;
     (*x) ^= (*x) << 1;
@@ -61,38 +59,16 @@ static inline unsigned long xorshf96(unsigned long *x,
 
 static inline long rand_range(long r)
 {
-#if defined(LOCAL_RAND)
     long v = xorshf96(seeds, seeds + 1, seeds + 2) % r;
     v++;
-#else
-    int m = RAND_MAX;
-    long d, v = 0;
-
-    do {
-        d = (m > r ? r : m);
-        v += 1 + (long) (d * ((double) rand() / ((double) (m) + 1.0)));
-        r -= m;
-    } while (r > 0);
-#endif
     return v;
 }
 
 /* Re-entrant version of rand_range(r) */
 static inline long rand_range_re(unsigned int *seed, long r)
 {
-#if defined(LOCAL_RAND)
     long v = xorshf96(seeds, seeds + 1, seeds + 2) % r;
     v++;
-#else
-    int m = RAND_MAX;
-    long d, v = 0;
-
-    do {
-        d = (m > r ? r : m);
-        v += 1 + (long) (d * ((double) rand_r(seed) / ((double) (m) + 1.0)));
-        r -= m;
-    } while (r > 0);
-#endif
     return v;
 }
 

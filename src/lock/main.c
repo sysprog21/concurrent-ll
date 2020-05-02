@@ -40,7 +40,7 @@ uint32_t max_key;
 ALIGNED(64) uint8_t running[64];
 
 // per-thread seeds for the custom random function
-__thread unsigned long *seeds;
+__thread uint64_t *seeds;
 
 llist_t *the_list;
 
