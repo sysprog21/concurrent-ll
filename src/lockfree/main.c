@@ -1,6 +1,4 @@
-#include <assert.h>
 #include <getopt.h>
-#include <limits.h>
 #include <pthread.h>
 #include <signal.h>
 #include <stdio.h>

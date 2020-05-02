@@ -1,12 +1,8 @@
-/*
- * Lock-free linkedlist implementation of Harris' algorithm
- * "A Pragmatic Implementation of Non-Blocking Linked Lists"
- * T. Harris, p. 300-314, DISC 2001.
- */
-
 #include "list.h"
 
+#include <limits.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 /*
  * The five following functions handle the low-order mark bit that indicates
