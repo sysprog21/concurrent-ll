@@ -48,9 +48,9 @@ You can find several useful scripts that will help you test and evaluate your im
 In details:
 * `scripts/test_correctness.sh`: test the correctness of an implementation, by stressing it
 * `scripts/scalability1.sh`: benchmark 1 application and get its throughput and scalability
-  E.g., `scripts/scalability1.sh all ./out/test-lock -i128`
+  E.g., `scripts/scalability1.sh all out/test-lock -i128`
 * `scripts/scalability2.sh`: benchmark 2 applications and get their throughput and scalability
-  E.g., `scripts/scalability2.sh all ./out/test-lock ./out/test-lockfree -i100`
+  E.g., `scripts/scalability2.sh all out/test-lock out/test-lockfree -i100`
 * `scripts/run_ll.sh`: execute the workloads that will be part of the deliverable
 * `scripts/create_plots_ll.sh`: generate the plots (int plots folder) of the data generated with
   `scripts/run_ll.sh`
