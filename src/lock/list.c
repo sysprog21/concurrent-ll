@@ -43,8 +43,7 @@ int list_contains(llist_t *the_list, val_t val)
     return 0;
 }
 
-
-node_t *new_node(val_t val, node_t *next)
+static node_t *new_node(val_t val, node_t *next)
 {
     /* allocate node */
     node_t *node = malloc(sizeof(node_t));

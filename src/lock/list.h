@@ -37,7 +37,6 @@ typedef struct llist {
     node_t *head;  // pointer to the head of the list
 } llist_t;
 
-
 llist_t *list_new();
 // return 0 if not found, positive number otherwise
 int list_contains(llist_t *the_list, val_t val);
@@ -47,8 +46,5 @@ int list_add(llist_t *the_list, val_t val);
 int list_remove(llist_t *the_list, val_t val);
 void list_delete(llist_t *the_list);
 int list_size(llist_t *the_list);
-
-
-node_t *new_node(val_t val, node_t *next);
 
 #endif
