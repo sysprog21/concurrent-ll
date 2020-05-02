@@ -4,6 +4,8 @@
  * T. Harris, p. 300-314, DISC 2001.
  */
 
+#include <stdint.h>
+
 #include "list.h"
 
 /*
@@ -14,35 +16,21 @@
  *  - get_(un)marked_ref sets the mark before returning the node.
  */
 static inline
-int is_marked_ref(long i)
+int is_marked_ref(void *i)
 {
-    return (int)(i & 0x1L);
+    return (int)((uintptr_t)i & 0x1L);
 }
 
 static inline
-long unset_mark(long i)
+void *get_unmarked_ref(void *w)
 {
-    i &= ~0x1L;
-    return i;
+    return (void *)((uintptr_t)w & ~0x1L);
 }
 
 static inline
-long set_mark(long i)
+void *get_marked_ref(void *w)
 {
-    i |= 0x1L;
-    return i;
-}
-
-static inline
-long get_unmarked_ref(long w)
-{
-    return w & ~0x1L;
-}
-
-static inline
-long get_marked_ref(long w)
-{
-    return w | 0x1L;
+    return (void *)((uintptr_t)w | 0x1L);
 }
 
 /*
