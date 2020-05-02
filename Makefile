@@ -71,7 +71,7 @@ $(OUT)/test-lock: $(LOCK_OBJS)
 	@mkdir -p $(OUT)
 	$(CC) -o $@ $^ $(LDFLAGS)
 src/lock/%.o: src/lock/%.c
-	$(CC) $(CFLAGS) -DLOCKTYPE -o $@ -MMD -MF $@.d -c $<
+	$(CC) $(CFLAGS) -DLOCK_BASED -o $@ -MMD -MF $@.d -c $<
 
 LOCKFREE_OBJS =
 LOCKFREE_OBJS += \

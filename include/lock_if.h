@@ -5,9 +5,8 @@
 
 #include "utils.h"
 
-#if defined(LOCKTYPE)
-typedef uint32_t
-    ptlock_t; /* change the type accorind to the lock you want to use */
+#if defined(LOCK_BASED)
+typedef uint32_t ptlock_t;
 #define INIT_LOCK(lock) lock_init(lock)
 #define DESTROY_LOCK(lock) lock_destroy(lock)
 #define LOCK(lock) lock_lock(lock)
@@ -41,9 +40,9 @@ static inline uint32_t lock_unlock(volatile ptlock_t *l)
     return 0;
 }
 
-#else /* not defined LOCK */
-typedef pthread_mutex_t
-    ptlock_t; /* change the type accorind to the lock you want to use */
+#else /* lock-free implementation */
+
+typedef pthread_mutex_t ptlock_t;
 #define INIT_LOCK(lock)
 #define DESTROY_LOCK(lock)
 #define LOCK(lock)
