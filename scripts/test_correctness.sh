@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source scripts/lock_exec;
 source scripts/config;
 
-for bin in $(ls ./out/test-*);
+for bin in $(ls out/test-*);
 do
     echo "Testing: $bin";
     $run_script $bin -n$max_cores | grep -i "expected";

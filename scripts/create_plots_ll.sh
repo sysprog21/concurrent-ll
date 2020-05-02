@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 app_all="ll";
 
-dat_dir="./out/data";
-gp_dir="./out/gp";
-plot_dir="./out/plots"
-gp_template="./scripts/template.gp";
+dat_dir="out/data";
+gp_dir="out/gp";
+plot_dir="out/plots"
+gp_template="scripts/template.gp";
 
 [ -d "$dat_dir" ] || mkdir -p $dat_dir;
 [ -d "$gp_dir" ] || mkdir -p $gp_dir;
@@ -31,7 +31,7 @@ do
 	    dat="$dat_dir/$app.i$initial.u$update.dat";
 	    gp="$gp_dir/$app.i$initial.u$update.gp";
 	    png="$plot_dir/$app.i$initial.u$update.png";
-	    title="Lock-free vs. lock-based $app / Size: $initial / Update: $update";
+	    title="Lock-free vs. Lock-based $app / Size: $initial / Update: $update";
 
 	    cp $gp_template $gp
 

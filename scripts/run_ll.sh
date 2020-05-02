@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-out_dir="./out/data";
+out_dir="out/data";
 cores="all";
 duration="2000";
 
@@ -22,8 +22,8 @@ do
 	echo "** -u$update";
 
         out="$out_dir/ll.i$initial.u$update.dat";
-        ./scripts/scalability2.sh "$cores" \
-            ./out/test-lock ./out/test-lockfree \
+        scripts/scalability2.sh "$cores" \
+            out/test-lock out/test-lockfree \
             -d$duration -i$initial -r$range -u$update | tee $out;
     done
 done
