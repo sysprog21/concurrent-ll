@@ -18,29 +18,6 @@ CFLAGS += -DDEFAULT
 $(info *** Using as a default number of cores: $(CORE_NUM) on 1 socket)
 $(info ***)
 
-# Architecture dependent settings
-ifndef ARCH
-ARCH_NAME = $(shell uname -m)
-endif
-
-ifeq ($(ARCH_NAME), i386)
-ARCH = x86
-CFLAGS += -m32
-LDFLAGS += -m32
-endif
-
-ifeq ($(ARCH_NAME), i686)
-ARCH = x86
-CFLAGS += -m32
-LDFLAGS += -m32
-endif
-
-ifeq ($(ARCH_NAME), x86_64)
-ARCH = x86_64
-CFLAGS += -m64
-LDFLAGS += -m64
-endif
-
 # Generic configurations
 CFLAGS += --std=gnu99 -pedantic -Wall
 CFLAGS += -fno-strict-aliasing
