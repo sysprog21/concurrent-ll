@@ -15,16 +15,12 @@ The lock-based implementation will use a technique called "hand-over-hand
 locking", while the lock-free will be based on Harris' algorithm (reference
 below).
 
-
-Reference
----------
+## Reference
 Lock-free linkedlist implementation of Harris' algorithm
 > "A Pragmatic Implementation of Non-Blocking Linked Lists" 
 > T. Harris, p. 300-314, DISC 2001.
 
-
-Build
------
+## Build
 You can compile the code (in Linux) by calling:
 ```shell
 $ make
@@ -40,15 +36,13 @@ You can verify by calling:
 $ make check
 ```
 
-Benchmarking
-------------
+## Benchmarking
 You can invoke the benchmarking scripts by calling:
 ```shell
 $ make bench
 ```
 
-Tools
------
+## Tools
 You can find several useful scripts that will help you test and evaluate your implementations.
 
 In details:
@@ -62,9 +56,7 @@ In details:
   `scripts/run_ll.sh`
   Note: You need [gnuplot](http://gnuplot.info/) installed		  
 
-
-Implementation
---------------
+## Implementation
 You can find an easy-to-use interface for atomic operations in
 `include/atomic_ops.h`.
 
@@ -88,3 +80,9 @@ threads might be holding a reference to this memory.
 When using locks, memory management is rather straightforward, because of the
 mutual exclusion property of locks. You can optionally implement memory
 management on the lock-based version.
+
+## License
+
+`concurrent-ll` is released under the BSD 2 clause license. Use of this
+source code is governed by a BSD-style license that can be found in the
+LICENSE file.
