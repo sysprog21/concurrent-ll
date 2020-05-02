@@ -1,6 +1,7 @@
 #include "list.h"
 
 #include <limits.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -11,9 +12,9 @@
  *  - (un)set_marked changes the mark,
  *  - get_(un)marked_ref sets the mark before returning the node.
  */
-static inline int is_marked_ref(void *i)
+static inline bool is_marked_ref(void *i)
 {
-    return (int) ((uintptr_t) i & 0x1L);
+    return (bool) ((uintptr_t) i & 0x1L);
 }
 
 static inline void *get_unmarked_ref(void *w)
