@@ -1,9 +1,4 @@
-/*
- * Lock-free linkedlist implementation of Harris' algorithm
- * "A Pragmatic Implementation of Non-Blocking Linked Lists"
- * T. Harris, p. 300-314, DISC 2001.
- */
-
+#include "atomic_ops_if.h"
 #include "list.h"
 
 int list_contains(llist_t *the_list, val_t val)

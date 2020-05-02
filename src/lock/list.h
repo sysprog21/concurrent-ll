@@ -1,25 +1,9 @@
-/*
- *  linkedlist.h
- *  interface for the list
- *
- */
+/* interface for the list */
+
 #ifndef LLIST_H_
 #define LLIST_H_
 
-#include <assert.h>
-#include <getopt.h>
-#include <limits.h>
-#include <pthread.h>
-#include <signal.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <time.h>
-
-#include "atomic_ops_if.h"
 #include "lock_if.h"
-#include "utils.h"
 
 #ifdef DEBUG
 #define IO_FLUSH fflush(NULL)
