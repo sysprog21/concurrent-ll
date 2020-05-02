@@ -80,8 +80,7 @@ int list_contains(llist_t *the_list, val_t val)
             // either we found it, or found the first larger element
             if (iterator->data == val)
                 return 1;
-            else
-                return 0;
+            return 0;
         }
 
         // always get unmarked pointer
@@ -114,7 +113,7 @@ llist_t *list_new()
 
 void list_delete(llist_t *the_list)
 {
-    // not for now
+    // FIXME: implement the deletion
 }
 
 int list_size(llist_t *the_list)
@@ -133,9 +132,8 @@ int list_add(llist_t *the_list, val_t val)
     node_t *new_elem = new_node(val, NULL);
     while (1) {
         right = list_search(the_list, val, &left);
-        if (right != the_list->tail && right->data == val) {
+        if (right != the_list->tail && right->data == val)
             return 0;
-        }
         new_elem->next = right;
         if (CAS_PTR(&(left->next), right, new_elem) == right) {
             FAI_U32(&(the_list->size));
@@ -156,9 +154,8 @@ int list_remove(llist_t *the_list, val_t val)
     while (1) {
         right = list_search(the_list, val, &left);
         // check if we found our node
-        if (right == the_list->tail || right->data != val) {
+        if (right == the_list->tail || right->data != val)
             return 0;
-        }
         right_succ = right->next;
         if (!is_marked_ref(right_succ)) {
             if (CAS_PTR(&(right->next), right_succ,

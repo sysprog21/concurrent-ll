@@ -7,15 +7,14 @@ int list_contains(llist_t *the_list, val_t val)
     /* lock sentinel node */
     node_t *elem = the_list->head;
     LOCK(elem->lock);
-    if (elem->next == NULL) {
+    if (!elem->next) {
         // the list is empty
         UNLOCK(elem->lock);
         return 0;
     }
 
     node_t *prev = elem;
-
-    while (elem->next != NULL && elem->next->data <= val) {
+    while (elem->next && elem->next->data <= val) {
         if (elem->next->data == val) {
             /* found it, return success */
             UNLOCK(elem->lock);
@@ -68,7 +67,7 @@ void list_delete(llist_t *the_list)
     /* must lock the whole list */
     node_t *elem = the_list->head;
     LOCK(elem->lock);
-    if (elem->next == NULL) {
+    if (!elem->next) {
         /* we have an empty list, just delete sentinel node */
         UNLOCK(elem->lock);
         DESTROY_LOCK(elem->lock);
@@ -78,14 +77,14 @@ void list_delete(llist_t *the_list)
         free(elem);
     } else {
         // we need to go through list
-        while (elem->next != NULL) {
+        while (elem->next) {
             // lock everything
             LOCK(elem->next->lock);
             elem = elem->next;
         }
 
         // everything is locked, delete them
-        while (the_list->head != NULL) {
+        while (the_list->head) {
             elem = the_list->head;
             the_list->head = elem->next;
 
@@ -107,7 +106,7 @@ int list_size(llist_t *the_list)
     // must lock the whole list
     node_t *prev = the_list->head;
     LOCK(prev->lock);
-    if (prev->next == NULL) {
+    if (!prev->next) {
         // the list is empty
         UNLOCK(prev->lock);
         return size;
@@ -116,7 +115,7 @@ int list_size(llist_t *the_list)
     node_t *elem = prev->next;
     LOCK(elem->lock);
     size++;
-    while (elem->next != NULL) {
+    while (elem->next) {
         size++;
         UNLOCK(prev->lock);
         prev = elem;
@@ -135,7 +134,7 @@ int list_add(llist_t *the_list, val_t val)
     // lock sentinel node
     node_t *elem = the_list->head;
     LOCK(elem->lock);
-    if (elem->next == NULL) {
+    if (!elem->next) {
         // the list is empty
         node_t *newElem = new_node(val, NULL);
         elem->next = newElem;
@@ -145,7 +144,7 @@ int list_add(llist_t *the_list, val_t val)
 
     node_t *prev = elem;
 
-    while (elem->next != NULL && elem->next->data <= val) {
+    while (elem->next && elem->next->data <= val) {
         if (elem->next->data == val) {
             // we already have that value, unlock and report failure
             UNLOCK(elem->lock);
@@ -177,7 +176,7 @@ int list_remove(llist_t *the_list, val_t val)
     // lock sentinel node
     node_t *prev = the_list->head;
     LOCK(prev->lock);
-    if (prev->next == NULL) {
+    if (!prev->next) {
         // the list is empty
         UNLOCK(prev->lock);
         return 0;
@@ -185,7 +184,7 @@ int list_remove(llist_t *the_list, val_t val)
 
     node_t *elem = prev->next;
     LOCK(elem->lock);
-    while (elem->next != NULL && elem->data <= val) {
+    while (elem->next && elem->data <= val) {
         if (elem->data == val) {
             // if found, assign prev next to elem next
             prev->next = elem->next;

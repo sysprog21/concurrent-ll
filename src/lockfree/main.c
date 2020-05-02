@@ -269,14 +269,12 @@ int main(int argc, char *const argv[])
     the_list = list_new();
 
     // initialize the data which will be passed to the threads
-    if ((data = (thread_data_t *) malloc(num_threads *
-                                         sizeof(thread_data_t))) == NULL) {
+    if ((data = malloc(num_threads * sizeof(thread_data_t))) == NULL) {
         perror("malloc");
         exit(1);
     }
 
-    if ((threads = (pthread_t *) malloc(num_threads * sizeof(pthread_t))) ==
-        NULL) {
+    if ((threads = malloc(num_threads * sizeof(pthread_t))) == NULL) {
         perror("malloc");
         exit(1);
     }
