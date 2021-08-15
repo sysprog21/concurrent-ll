@@ -18,14 +18,14 @@ echo "#cores  throughput  %linear scalability throughput  %linear scalability";
 prog=$prog1;
 
 printf "%-8d" 1;
-thr1a=$($run_script ./$prog $params -n1 | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
+thr1a=$(./$prog $params -n1 | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
 printf "%-12d" $thr1a;
 printf "%-8.2f" 100.00;
 printf "%-12d" 1;
 
 prog=$prog2;
 
-thr1b=$($run_script ./$prog $params -n1 | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
+thr1b=$(./$prog $params -n1 | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
 printf "%-12d" $thr1b;
 printf "%-8.2f" 100.00;
 printf "%-8d\n" 1;
@@ -42,7 +42,7 @@ do
     prog=$prog1;
     thr1=$thr1a;
 
-    thr=$($run_script ./$prog $params -n$c | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
+    thr=$(./$prog $params -n$c | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
     printf "%-12d" $thr;
     scl=$(echo "$thr/$thr1" | bc -l);
     linear_p=$(echo "100*(1-(($c-$scl)/$c))" | bc -l);
@@ -52,7 +52,7 @@ do
     prog=$prog2;
     thr1=$thr1b;
 
-    thr=$($run_script ./$prog $params -n$c | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
+    thr=$(./$prog $params -n$c | grep "#txs" | cut -d'(' -f2 | cut -d. -f1);
     printf "%-12d" $thr;
     scl=$(echo "$thr/$thr1" | bc -l);
     linear_p=$(echo "100*(1-(($c-$scl)/$c))" | bc -l);
