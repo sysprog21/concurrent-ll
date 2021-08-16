@@ -1,7 +1,5 @@
 #include "list.h"
 
-#include "atomic_ops_if.h"
-
 int list_contains(llist_t *the_list, val_t val)
 {
     /* lock sentinel node */

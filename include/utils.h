@@ -3,7 +3,6 @@
 
 #include <inttypes.h>
 
-#include "atomic_ops_if.h"
 #include "random.h"
 
 #define DO_ALIGN

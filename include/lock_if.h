@@ -3,6 +3,7 @@
 #ifndef _LOCK_IF_H_
 #define _LOCK_IF_H_
 
+#include "atomic_ops_if.h"
 #include "utils.h"
 
 #if defined(LOCK_BASED)
