@@ -1,6 +1,6 @@
 #include "list.h"
 
-int list_contains(llist_t *the_list, val_t val)
+int list_contains(list_t *the_list, val_t val)
 {
     /* lock sentinel node */
     node_t *elem = the_list->head;
@@ -50,17 +50,17 @@ static node_t *new_node(val_t val, node_t *next)
     return node;
 }
 
-llist_t *list_new()
+list_t *list_new()
 {
     /* allocate list */
-    llist_t *the_list = malloc(sizeof(llist_t));
+    list_t *the_list = malloc(sizeof(list_t));
 
     /* now need to create the sentinel node */
     the_list->head = new_node(0, NULL);
     return the_list;
 }
 
-void list_delete(llist_t *the_list)
+void list_delete(list_t *the_list)
 {
     /* must lock the whole list */
     node_t *elem = the_list->head;
@@ -98,7 +98,7 @@ void list_delete(llist_t *the_list)
     free(the_list);
 }
 
-int list_size(llist_t *the_list)
+int list_size(list_t *the_list)
 {
     int size = 0;
     // must lock the whole list
@@ -127,7 +127,7 @@ int list_size(llist_t *the_list)
     return size;
 }
 
-int list_add(llist_t *the_list, val_t val)
+int list_add(list_t *the_list, val_t val)
 {
     // lock sentinel node
     node_t *elem = the_list->head;
@@ -169,7 +169,7 @@ int list_add(llist_t *the_list, val_t val)
     return 1;
 }
 
-int list_remove(llist_t *the_list, val_t val)
+int list_remove(list_t *the_list, val_t val)
 {
     // lock sentinel node
     node_t *prev = the_list->head;

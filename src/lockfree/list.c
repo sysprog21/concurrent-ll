@@ -36,7 +36,7 @@ static inline void *get_marked_ref(void *w)
  * Encountered nodes that are marked as logically deleted are physically removed
  * from the list, yet not garbage collected.
  */
-node_t *list_search(llist_t *set, val_t val, node_t **left_node)
+node_t *list_search(list_t *set, val_t val, node_t **left_node)
 {
     node_t *left_node_next, *right_node;
     left_node_next = right_node = NULL;
@@ -72,7 +72,7 @@ node_t *list_search(llist_t *set, val_t val, node_t **left_node)
  * list_contains returns a value different from 0 whether there is a node in the
  * list owning value val.
  */
-int list_contains(llist_t *the_list, val_t val)
+int list_contains(list_t *the_list, val_t val)
 {
     node_t *iterator = get_unmarked_ref(the_list->head->next);
     while (iterator != the_list->tail) {
@@ -98,10 +98,10 @@ static node_t *new_node(val_t val, node_t *next)
     return node;
 }
 
-llist_t *list_new()
+list_t *list_new()
 {
     // allocate list
-    llist_t *the_list = malloc(sizeof(llist_t));
+    list_t *the_list = malloc(sizeof(list_t));
 
     // now need to create the sentinel node
     the_list->head = new_node(INT_MIN, NULL);
@@ -111,12 +111,12 @@ llist_t *list_new()
     return the_list;
 }
 
-void list_delete(llist_t *the_list)
+void list_delete(list_t *the_list)
 {
     // FIXME: implement the deletion
 }
 
-int list_size(llist_t *the_list)
+int list_size(list_t *the_list)
 {
     return the_list->size;
 }
@@ -125,7 +125,7 @@ int list_size(llist_t *the_list)
  * list_add inserts a new node with the given value val in the list
  * (if the value was absent) or does nothing (if the value is already present).
  */
-int list_add(llist_t *the_list, val_t val)
+int list_add(list_t *the_list, val_t val)
 {
     node_t *right, *left;
     right = left = NULL;
@@ -147,7 +147,7 @@ int list_add(llist_t *the_list, val_t val)
  * or does nothing (if the value is already present).
  * The deletion is logical and consists of setting the node mark bit to 1.
  */
-int list_remove(llist_t *the_list, val_t val)
+int list_remove(list_t *the_list, val_t val)
 {
     node_t *right, *left, *right_succ;
     right = left = right_succ = NULL;

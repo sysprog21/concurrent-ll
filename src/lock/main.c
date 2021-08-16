@@ -42,7 +42,7 @@ ALIGNED(64) uint8_t running[64];
 // per-thread seeds for the custom random function
 __thread uint64_t *seeds;
 
-llist_t *the_list;
+list_t *the_list;
 
 
 // a simple barrier implementation

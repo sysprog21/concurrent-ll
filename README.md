@@ -61,7 +61,7 @@ You can find an easy-to-use interface for atomic operations in
 `include/atomic_ops.h`.
 
 * `list.h`: contains the interface and the structures of the list. 
-You only need to change the llist_t and node_t structures to reflect the list
+You only need to change the `list_t` and `node_t` structures to reflect the list
 and a node of a list of your implementations respectively. 
 
 * `list.c`: contains the implementations of the operations of the list, i.e.,
