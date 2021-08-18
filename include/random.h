@@ -57,32 +57,16 @@ static inline uint64_t *seed_rand()
 static inline uint64_t xorshf96(uint64_t *x, uint64_t *y, uint64_t *z)
 {
     /* period 2^96-1 */
-    uint64_t t;
-    (*x) ^= (*x) << 16;
-    (*x) ^= (*x) >> 5;
-    (*x) ^= (*x) << 1;
+    *x ^= (*x) << 16;
+    *x ^= (*x) >> 5;
+    *x ^= (*x) << 1;
 
-    t = *x;
-    (*x) = *y;
-    (*y) = *z;
-    (*z) = t ^ (*x) ^ (*y);
+    uint64_t t = *x;
+    *x = *y;
+    *y = *z;
+    *z = t ^ (*x) ^ (*y);
 
     return *z;
-}
-
-static inline long rand_range(long r)
-{
-    long v = xorshf96(seeds, seeds + 1, seeds + 2) % r;
-    v++;
-    return v;
-}
-
-/* Re-entrant version of rand_range(r) */
-static inline long rand_range_re(unsigned int *seed, long r)
-{
-    long v = xorshf96(seeds, seeds + 1, seeds + 2) % r;
-    v++;
-    return v;
 }
 
 #endif
