@@ -1,5 +1,5 @@
-#ifndef _H_RANDOM_
-#define _H_RANDOM_
+#ifndef _RANDOM_H_
+#define _RANDOM_H_
 
 #include <stdint.h>
 #include <stdlib.h>

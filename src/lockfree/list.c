@@ -1,12 +1,22 @@
-#include "list.h"
-
 #include <limits.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
-/*
- * The five following functions handle the low-order mark bit that indicates
+#include "list.h"
+
+struct node {
+    val_t data;
+    struct node *next;
+};
+
+struct list {
+    node_t *head;
+    node_t *tail;
+    uint32_t size;
+};
+
+/* The following functions handle the low-order mark bit that indicates
  * whether a node is logically deleted (1) or not (0).
  *  - is_marked_ref returns whether it is marked,
  *  - (un)set_marked changes the mark,
@@ -27,16 +37,15 @@ static inline void *get_marked_ref(void *w)
     return (void *) ((uintptr_t) w | 0x1L);
 }
 
-/*
- * list_search looks for value val, it
+/* list_search looks for value val, it
  *  - returns right_node owning val (if present) or its immediately higher
  *    value present in the list (otherwise) and
  *  - sets the left_node to the node owning the value immediately lower than
- * val.
+ *    val.
  * Encountered nodes that are marked as logically deleted are physically removed
  * from the list, yet not garbage collected.
  */
-node_t *list_search(list_t *set, val_t val, node_t **left_node)
+static node_t *list_search(list_t *set, val_t val, node_t **left_node)
 {
     node_t *left_node_next, *right_node;
     left_node_next = right_node = NULL;
@@ -68,8 +77,7 @@ node_t *list_search(list_t *set, val_t val, node_t **left_node)
     }
 }
 
-/*
- * list_contains returns a value different from 0 whether there is a node in the
+/* list_contains returns a value different from 0 whether there is a node in the
  * list owning value val.
  */
 int list_contains(list_t *the_list, val_t val)
@@ -77,13 +85,11 @@ int list_contains(list_t *the_list, val_t val)
     node_t *iterator = get_unmarked_ref(the_list->head->next);
     while (iterator != the_list->tail) {
         if (!is_marked_ref(iterator->next) && iterator->data >= val) {
-            // either we found it, or found the first larger element
-            if (iterator->data == val)
-                return 1;
-            return 0;
+            /* either we found it, or found the first larger element */
+            return iterator->data == val;
         }
 
-        // always get unmarked pointer
+        /* always get unmarked pointer */
         iterator = get_unmarked_ref(iterator->next);
     }
     return 0;
@@ -91,7 +97,6 @@ int list_contains(list_t *the_list, val_t val)
 
 static node_t *new_node(val_t val, node_t *next)
 {
-    // allocate node
     node_t *node = malloc(sizeof(node_t));
     node->data = val;
     node->next = next;
@@ -100,10 +105,10 @@ static node_t *new_node(val_t val, node_t *next)
 
 list_t *list_new()
 {
-    // allocate list
+    /* allocate list */
     list_t *the_list = malloc(sizeof(list_t));
 
-    // now need to create the sentinel node
+    /* now need to create the sentinel node */
     the_list->head = new_node(INT_MIN, NULL);
     the_list->tail = new_node(INT_MAX, NULL);
     the_list->head->next = the_list->tail;
@@ -113,7 +118,7 @@ list_t *list_new()
 
 void list_delete(list_t *the_list)
 {
-    // FIXME: implement the deletion
+    /* FIXME: implement the deletion */
 }
 
 int list_size(list_t *the_list)
@@ -121,19 +126,18 @@ int list_size(list_t *the_list)
     return the_list->size;
 }
 
-/*
- * list_add inserts a new node with the given value val in the list
+/* list_add inserts a new node with the given value val in the list
  * (if the value was absent) or does nothing (if the value is already present).
  */
 int list_add(list_t *the_list, val_t val)
 {
-    node_t *right, *left;
-    right = left = NULL;
+    node_t *left = NULL;
     node_t *new_elem = new_node(val, NULL);
     while (1) {
-        right = list_search(the_list, val, &left);
+        node_t *right = list_search(the_list, val, &left);
         if (right != the_list->tail && right->data == val)
             return 0;
+
         new_elem->next = right;
         if (CAS_PTR(&(left->next), right, new_elem) == right) {
             FAI_U32(&(the_list->size));
@@ -142,21 +146,20 @@ int list_add(list_t *the_list, val_t val)
     }
 }
 
-/*
- * list_remove deletes a node with the given value val (if the value is present)
+/* list_remove deletes a node with the given value val (if the value is present)
  * or does nothing (if the value is already present).
  * The deletion is logical and consists of setting the node mark bit to 1.
  */
 int list_remove(list_t *the_list, val_t val)
 {
-    node_t *right, *left, *right_succ;
-    right = left = right_succ = NULL;
+    node_t *left = NULL;
     while (1) {
-        right = list_search(the_list, val, &left);
-        // check if we found our node
+        node_t *right = list_search(the_list, val, &left);
+        /* check if we found our node */
         if (right == the_list->tail || right->data != val)
             return 0;
-        right_succ = right->next;
+
+        node_t *right_succ = right->next;
         if (!is_marked_ref(right_succ)) {
             if (CAS_PTR(&(right->next), right_succ,
                         get_marked_ref(right_succ)) == right_succ) {
@@ -165,6 +168,4 @@ int list_remove(list_t *the_list, val_t val)
             }
         }
     }
-    // we just logically delete it, someone else will invoke search and delete
-    // it
 }

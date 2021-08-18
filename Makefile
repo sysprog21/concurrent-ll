@@ -39,9 +39,8 @@ all: $(EXEC)
 deps =
 
 LOCK_OBJS =
-LOCK_OBJS += \
-    src/lock/list.o \
-    src/lock/main.o
+LOCK_OBJS += src/lock/list.o
+LOCK_OBJS += src/main.o
 deps += $(LOCK_OBJS:%.o=%.o.d)
 
 $(OUT)/test-lock: $(LOCK_OBJS)
@@ -51,9 +50,8 @@ src/lock/%.o: src/lock/%.c
 	$(CC) $(CFLAGS) -DLOCK_BASED -o $@ -MMD -MF $@.d -c $<
 
 LOCKFREE_OBJS =
-LOCKFREE_OBJS += \
-    src/lockfree/list.o \
-    src/lockfree/main.o
+LOCKFREE_OBJS += src/lockfree/list.o
+LOCKFREE_OBJS += src/main.o
 deps += $(LOCKFREE_OBJS:%.o=%.o.d)
 
 $(OUT)/test-lockfree: $(LOCKFREE_OBJS)

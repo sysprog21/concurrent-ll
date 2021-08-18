@@ -1,5 +1,5 @@
-#ifndef _UTILS_H_INCLUDED_
-#define _UTILS_H_INCLUDED_
+#ifndef _UTILS_H_
+#define _UTILS_H_
 
 #include <inttypes.h>
 
