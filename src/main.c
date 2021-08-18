@@ -238,7 +238,7 @@ int main(int argc, char *const argv[])
     /* we round the max key up to the nearest power of 2, which makes our random
      * key generation more efficient.
      */
-    max_key = pow2roundup(max_key) - 1;
+    max_key = next_power_of_two(max_key) - 1;
 
     /* initialization of the list */
     the_list = list_new();

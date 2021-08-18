@@ -12,17 +12,10 @@
 /* Round up to next higher power of 2 (return x if it's already a power
  * of 2) for 32-bit numbers
  */
-static inline uint32_t pow2roundup(uint32_t x)
+static inline uint32_t next_power_of_two(uint32_t x)
 {
-    if (x == 0)
-        return 1;
-    --x;
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-    return x + 1;
+    x += !x;
+    return (uint32_t) 1 << (31 - __builtin_clz(x + x - 1));
 }
 
 #endif
