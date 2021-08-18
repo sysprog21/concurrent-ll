@@ -180,7 +180,6 @@ int main(int argc, char *const argv[])
     while (1) {
         int i = 0;
         int c = getopt_long(argc, argv, "hd:n:l:u:i:r:", long_options, &i);
-
         if (c == -1)
             break;
 
@@ -192,10 +191,10 @@ int main(int argc, char *const argv[])
             /* Flag is automatically set */
             break;
         case 'h':
-            printf("lock stress test\n"
+            printf("stress test\n"
                    "\n"
                    "Usage:\n"
-                   "  stress_test [options...]\n"
+                   "  %s [options...]\n"
                    "\n"
                    "Options:\n"
                    "  -h, --help\n"
@@ -207,7 +206,8 @@ int main(int argc, char *const argv[])
                    "  -r, --range <int>\n"
                    "        Key range (default=" XSTR(DEFAULT_RANGE) ")\n"
                    "  -n, --num-threads <int>\n"
-                   "        Number of threads (default=" XSTR(DEFAULT_NUM_THREADS) ")\n"
+                   "        Number of threads (default=" XSTR(DEFAULT_NUM_THREADS) ")\n",
+		   argv[0]
             );
             exit(0);
         case 'd':
