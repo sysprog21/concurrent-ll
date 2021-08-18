@@ -76,10 +76,8 @@ static node_t *list_search(list_t *set, val_t val, node_t **left_node)
     }
 }
 
-/* list_contains returns a value different from 0 whether there is a node in the
- * list owning value val.
- */
-int list_contains(list_t *the_list, val_t val)
+/* return true if there is a node in the list owning value val. */
+bool list_contains(list_t *the_list, val_t val)
 {
     node_t *iterator = get_unmarked_ref(the_list->head->next);
     while (iterator != the_list->tail) {
@@ -91,7 +89,7 @@ int list_contains(list_t *the_list, val_t val)
         /* always get unmarked pointer */
         iterator = get_unmarked_ref(iterator->next);
     }
-    return 0;
+    return false;
 }
 
 static node_t *new_node(val_t val, node_t *next)
@@ -125,45 +123,39 @@ int list_size(list_t *the_list)
     return the_list->size;
 }
 
-/* list_add inserts a new node with the given value val in the list
- * (if the value was absent) or does nothing (if the value is already present).
- */
-int list_add(list_t *the_list, val_t val)
+bool list_add(list_t *the_list, val_t val)
 {
     node_t *left = NULL;
     node_t *new_elem = new_node(val, NULL);
     while (1) {
         node_t *right = list_search(the_list, val, &left);
         if (right != the_list->tail && right->data == val)
-            return 0;
+            return false;
 
         new_elem->next = right;
         if (CAS_PTR(&(left->next), right, new_elem) == right) {
             FAI_U32(&(the_list->size));
-            return 1;
+            return true;
         }
     }
 }
 
-/* list_remove deletes a node with the given value val (if the value is present)
- * or does nothing (if the value is already present).
- * The deletion is logical and consists of setting the node mark bit to 1.
- */
-int list_remove(list_t *the_list, val_t val)
+/* The deletion is logical and consists of setting the node mark bit to 1. */
+bool list_remove(list_t *the_list, val_t val)
 {
     node_t *left = NULL;
     while (1) {
         node_t *right = list_search(the_list, val, &left);
         /* check if we found our node */
-        if (right == the_list->tail || right->data != val)
-            return 0;
+        if ((right == the_list->tail) || (right->data != val))
+            return false;
 
         node_t *right_succ = right->next;
         if (!is_marked_ref(right_succ)) {
             if (CAS_PTR(&(right->next), right_succ,
                         get_marked_ref(right_succ)) == right_succ) {
                 FAD_U32(&(the_list->size));
-                return 1;
+                return true;
             }
         }
     }

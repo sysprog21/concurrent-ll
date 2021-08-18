@@ -10,21 +10,21 @@ struct list {
     node_t *head;
 };
 
-int list_contains(list_t *the_list, val_t val)
+bool list_contains(list_t *the_list, val_t val)
 {
     /* lock sentinel node */
     node_t *elem = the_list->head;
     LOCK(elem->lock);
     if (!elem->next) { /* the list is empty */
         UNLOCK(elem->lock);
-        return 0;
+        return false;
     }
 
     node_t *prev = elem;
     while (elem->next && elem->next->data <= val) {
-        if (elem->next->data == val) { /* found it, return success */
+        if (elem->next->data == val) { /* found it */
             UNLOCK(elem->lock);
-            return 1;
+            return true;
         }
         prev = elem;
         elem = elem->next;
@@ -35,12 +35,12 @@ int list_contains(list_t *the_list, val_t val)
     /* just check if the last node in the list is not equal to val */
     if (elem->data == val) { /* found */
         UNLOCK(elem->lock);
-        return 1;
+        return true;
     }
 
     /* not found in the list */
     UNLOCK(elem->lock);
-    return 0;
+    return false;
 }
 
 static node_t *new_node(val_t val, node_t *next)
@@ -132,7 +132,7 @@ int list_size(list_t *the_list)
     return size;
 }
 
-int list_add(list_t *the_list, val_t val)
+bool list_add(list_t *the_list, val_t val)
 {
     /* lock sentinel node */
     node_t *elem = the_list->head;
@@ -141,7 +141,7 @@ int list_add(list_t *the_list, val_t val)
         node_t *new_elem = new_node(val, NULL);
         elem->next = new_elem;
         UNLOCK(elem->lock);
-        return 1;
+        return true;
     }
 
     node_t *prev = elem;
@@ -150,7 +150,7 @@ int list_add(list_t *the_list, val_t val)
         if (elem->next->data == val) {
             /* we already have that value, unlock and report failure */
             UNLOCK(elem->lock);
-            return 0;
+            return false;
         }
         prev = elem;
         elem = elem->next;
@@ -158,10 +158,9 @@ int list_add(list_t *the_list, val_t val)
         UNLOCK(prev->lock);
     }
     /* just check if the last node in the list is not equal to val */
-    if (elem->data == val) {
+    if (elem->data == val) { /* if equal report failure */
         UNLOCK(elem->lock);
-        /* if equal report failure */
-        return 0;
+        return false;
     }
 
     /* place it in between prev and elem */
@@ -170,17 +169,17 @@ int list_add(list_t *the_list, val_t val)
 
     /* successfully added new value, unlock elem */
     UNLOCK(elem->lock);
-    return 1;
+    return true;
 }
 
-int list_remove(list_t *the_list, val_t val)
+bool list_remove(list_t *the_list, val_t val)
 {
     /* lock sentinel node */
     node_t *prev = the_list->head;
     LOCK(prev->lock);
     if (!prev->next) { /* the list is empty */
         UNLOCK(prev->lock);
-        return 0;
+        return false;
     }
 
     node_t *elem = prev->next;
@@ -198,7 +197,7 @@ int list_remove(list_t *the_list, val_t val)
 
             /* success */
             UNLOCK(prev->lock);
-            return 1;
+            return true;
         }
         UNLOCK(prev->lock);
         prev = elem;
@@ -219,11 +218,11 @@ int list_remove(list_t *the_list, val_t val)
 
         /* success */
         UNLOCK(prev->lock);
-        return 1;
+        return true;
     }
 
     /* we did not find it; unlock and report failure */
     UNLOCK(elem->lock);
     UNLOCK(prev->lock);
-    return 0;
+    return false;
 }

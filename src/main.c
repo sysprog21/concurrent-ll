@@ -90,9 +90,8 @@ void *test(void *data)
      * we can simply do random() & 256
      */
     uint32_t read_thresh = 256 * finds / 100;
-    uint32_t rand_max;
     seeds = seed_rand(); /* the custom random number generator */
-    rand_max = max_key;
+    uint32_t rand_max = max_key;
     val_t the_value;
     int last = -1;
 
