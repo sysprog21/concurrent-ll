@@ -17,9 +17,9 @@
         _old;                                                           \
     })
 #define CAS_U8(a, b, c) CAS_PTR(a, b, c)
-#define CAS_U16(a, b, c) CAS_PTR(a, b, c)
-#define CAS_U32(a, b, c) CAS_PTR(a, b, c)
-#define CAS_U64(a, b, c) CAS_PTR(a, b, c)
+#define CAS_U16(a, b, c) CAS_PTR((uint16_t *) a, b, c)
+#define CAS_U32(a, b, c) CAS_PTR((uint32_t *) a, b, c)
+#define CAS_U64(a, b, c) CAS_PTR((uint64_t *) a, b, c)
 
 // Fetch-and-increment
 #define FAI_U8(a) __atomic_fetch_add(a, 1, __ATOMIC_RELAXED)
