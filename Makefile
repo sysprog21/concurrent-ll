@@ -14,7 +14,6 @@ CFLAGS += -DCORE_NUM=${CORE_NUM}
 else
 CFLAGS += -DCORE_NUM=4
 endif
-CFLAGS += -DDEFAULT
 $(info *** Using as a default number of cores: $(CORE_NUM) on 1 socket)
 $(info ***)
 

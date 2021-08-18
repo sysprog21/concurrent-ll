@@ -4,7 +4,7 @@
 #define _LIST_H_
 
 #include <stdbool.h>
-#include "lock_if.h"
+#include "lock.h"
 
 typedef intptr_t val_t;
 

@@ -29,7 +29,6 @@ in the base directory.
 
 If the number of cores on your processor is not recognized properly, fix it
 in `include/utils.h`.
-file under the "#if defined(DEFAULT)" definitions.
 
 You can verify by calling:
 ```shell
@@ -58,19 +57,20 @@ In details:
 
 ## Implementation
 You can find an easy-to-use interface for atomic operations in
-`include/atomic_ops.h`.
+`include/atomics.h`.
 
 * `list.h`: contains the interface and the structures of the list. 
-You only need to change the `list_t` and `node_t` structures to reflect the list
-and a node of a list of your implementations respectively. 
 
 * `list.c`: contains the implementations of the operations of the list, i.e.,
 creating a new list and a new bucket, freeing the list, and, of course,
 adding, removing, and looking for an element in the list.
 
+You might change the `list` and `node` structures to reflect the list and
+a node of a list of your implementations respectively.
+
 Additionally, for the lock-based version, you need to implement and use some
 locks. You can find the skeletons for initializing, freeing, locking, and
-unlocking a lock in `include/lock_if.h`.
+unlocking a lock in `include/lock.h`.
 
 Memory management is one of most cumbersome problems on lock-free data
 structures. In other words, when a thread removes an element (a node) from

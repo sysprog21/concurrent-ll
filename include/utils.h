@@ -5,11 +5,8 @@
 
 #include "random.h"
 
-#define DO_ALIGN
-#if defined(DO_ALIGN)
+#ifndef ALIGNED
 #define ALIGNED(N) __attribute__((aligned(N)))
-#else
-#define ALIGNED(N)
 #endif
 
 /* Round up to next higher power of 2 (return x if it's already a power

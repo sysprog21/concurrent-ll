@@ -1,7 +1,7 @@
 #ifndef _LOCK_IF_H_
 #define _LOCK_IF_H_
 
-#include "atomics_if.h"
+#include "atomics.h"
 #include "utils.h"
 
 typedef uint32_t ptlock_t;
