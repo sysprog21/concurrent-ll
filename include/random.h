@@ -43,14 +43,14 @@ static inline ticks getticks(void)
 
 static inline uint64_t *seed_rand()
 {
-    uint64_t *seeds;
-    if (posix_memalign((void **) &seeds, 64, 64) != 0) /* something wrong */
+    uint64_t *_seeds;
+    if (posix_memalign((void **) &_seeds, 64, 64) != 0) /* something wrong */
         return NULL;
 
-    seeds[0] = getticks() % 123456789;
-    seeds[1] = getticks() % 362436069;
-    seeds[2] = getticks() % 521288629;
-    return seeds;
+    _seeds[0] = getticks() % 123456789;
+    _seeds[1] = getticks() % 362436069;
+    _seeds[2] = getticks() % 521288629;
+    return _seeds;
 }
 
 /* Marsaglia's xorshf generator */
