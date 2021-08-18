@@ -11,8 +11,7 @@ struct node {
 };
 
 struct list {
-    node_t *head;
-    node_t *tail;
+    node_t *head, *tail;
     uint32_t size;
 };
 
