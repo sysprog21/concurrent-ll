@@ -12,7 +12,7 @@
 #define CAS_PTR(a, b, c)                                                \
     __extension__({                                                     \
         typeof(*a) _old = b, _new = c;                                  \
-        __atomic_compare_exchange(a, &_old, &_new, 1, __ATOMIC_SEQ_CST, \
+        __atomic_compare_exchange(a, &_old, &_new, 0, __ATOMIC_SEQ_CST, \
                                   __ATOMIC_SEQ_CST);                    \
         _old;                                                           \
     })
