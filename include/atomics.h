@@ -12,8 +12,8 @@
 #define CAS_PTR(a, b, c)                                                \
     __extension__({                                                     \
         typeof(*a) _old = b, _new = c;                                  \
-        __atomic_compare_exchange(a, &_old, &_new, 1, __ATOMIC_RELAXED, \
-                                  __ATOMIC_RELAXED);                    \
+        __atomic_compare_exchange(a, &_old, &_new, 1, __ATOMIC_SEQ_CST, \
+                                  __ATOMIC_SEQ_CST);                    \
         _old;                                                           \
     })
 #define CAS_U8(a, b, c) CAS_PTR(a, b, c)
