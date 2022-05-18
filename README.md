@@ -2,7 +2,8 @@
 
 The `concurrent-ll` package contains the skeleton code for implementing and
 evaluating two concurrent linked lists: a lock-free and a lock-based.
-The implementations should work on any Linux-based `x86`/`x86_64` environments.
+The implementations should work on any Linux-based `x86`/`x86_64`/`Arm64`
+environments.
 
 Both lists are sorted and provide three main operations: 
 * adding an element to the list (if not already in the list)
