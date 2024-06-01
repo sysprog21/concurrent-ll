@@ -37,6 +37,45 @@ static inline ticks getticks(void)
     __asm__ __volatile__("mrs %0, cntvct_el0" : "=r"(val));
     return val;
 }
+#elif defined(__riscv)
+/*
+ * Assume Zicsr is implemented and default
+ * enabled when compiling for RISC-V targets.
+ */
+static inline unsigned long read_time(void)
+{
+    unsigned long val;
+    __asm__ __volatile__("rdtime %0" : "=r"(val));
+    return val;
+}
+
+#if __riscv_xlen == 32
+static inline unsigned long read_timeh(void)
+{
+    unsigned long val;
+    __asm__ __volatile__("rdtimeh %0" : "=r"(val));
+    return val;
+}
+#endif
+
+static inline ticks getticks(void)
+{
+    uint64_t val;
+
+#if __riscv_xlen == 32
+    uint32_t hi, lo;
+
+    do {
+        hi = read_timeh();
+        lo = read_time();
+    } while (hi != read_timeh());
+
+    val = ((uint64_t) hi << 32) | lo;
+#else /* __riscv_xlen == 64 */
+    val = read_time();
+#endif
+    return val;
+}
 #else
 #error "Unsupported platform"
 #endif
